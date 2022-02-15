@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     width: '95%',
     justifyContent: 'space-around', 
     alignItems: 'center',
+    
 
   },
 
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
   image: {
     width: 25,
     height: 25,
-    marginRight: 20
+    marginRight: 20,
   },
 
   input: {
