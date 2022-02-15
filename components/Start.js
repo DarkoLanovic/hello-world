@@ -103,12 +103,12 @@ const styles = StyleSheet.create({
     height: '38%',
     width: '80%',
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 40,
   },
 
   title: {
-    fontSize: 40, 
-    fontWeight: "400", 
+    fontSize: 35, 
+    fontWeight: "300", 
     color: '#FFFFFF',
   },
 
