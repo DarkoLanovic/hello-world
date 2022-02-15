@@ -26,7 +26,8 @@
     "react-navigation": "^4.4.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@types/react-native": "^0.66.15"
   },
   "private": true
 }

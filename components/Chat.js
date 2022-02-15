@@ -4,8 +4,8 @@ import { View, Text } from 'react-native';
 
 export default class Chat extends React.Component {
   render() {
-    //entered name state from Start screen gets displayed in status bar at the top of the app
-    let name = this.props.route.params.name;
+    // Entered name state from Start screen gets displayed in status bar at the top of the Chat screen
+    let name = this.props.route.params.name; // OR ...  let { nmae } = this.props.routw.params; 
     this.props.navigation.setOptions({ title: name});
 
     const { bgColor } = this.props.route.params;
@@ -15,9 +15,10 @@ export default class Chat extends React.Component {
         flex: 1, 
         justifyContent: 'center', 
         alignItems: 'center',
-        backgroundColor: bgColor
+        backgroundColor: bgColor,
         }}>
-        <Text>Hello Chat!</Text>
+        <Text style={{color: 'blue', fontSize: 40}}>Hello!😀</Text>
+        
       </View>
     )
   }

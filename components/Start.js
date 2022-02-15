@@ -1,27 +1,23 @@
 import React from 'react';
-// importing Components from react native
 import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Image, TouchableOpacity } from 'react-native';
-// importing images and icons
 import BackgroundImage from '../assets/background-image.png';
-import icon from '../assets/usericon.png';
+import icon from '../assets/user-icon.png';
 
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
-
-    // state will be updated with whatever values change for the specific states
     this.state = { 
       name: '',
-      bgColor: this.colors.blue
+      bgColor: ''
     };
   }
 
-  // function to update the state with the new background color for Chat Screen chosen by the user
+  // To  update state with the new background color for ChatScreen chosen by the user
   changeBgColor = (newColor) => {
     this.setState({ bgColor: newColor });
   };
 
-  // background colors to choose from; will be used to update bgColor state
+  // Background colour for ChatScreen
   colors = {
     dark: '#090C08',
     purple: '#474056',
@@ -31,7 +27,6 @@ export default class Start extends React.Component {
 
   render() {
     return (
-      //Different components do differents things; View acts as a div from html
       <View style={styles.container}>
 
         <ImageBackground source={BackgroundImage} resizeMode='cover' style={styles.backgroundImage}>
@@ -47,12 +42,12 @@ export default class Start extends React.Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({ name: text})}
                 value={this.state.name}
-                placeholder='Your Name'
+                placeholder='Enter your name please'
               />
             </View>
 
             <View style={styles.colorBox}>
-              <Text style={styles.chooseColor}> Choose Background Color: </Text>
+              <Text style={styles.chooseColor}> Choose Chat Background </Text>
             </View>
 
             <View style={styles.colorArray}>
@@ -80,7 +75,7 @@ export default class Start extends React.Component {
                 name: this.state.name,
                 bgColor: this.state.bgColor
                 })}>
-                <Text style={styles.buttonText}>Start Chatting</Text>
+                <Text style={styles.buttonText}>Start Chat</Text>
             </Pressable>
             
           </View>
@@ -105,22 +100,22 @@ const styles = StyleSheet.create({
   },
 
   titleBox: {
-    height: '50%',
-    width: '88%',
+    height: '38%',
+    width: '80%',
     alignItems: 'center',
-    paddingTop: 100
+    paddingTop: 10,
   },
 
   title: {
-    fontSize: 45, 
-    fontWeight: "600", 
+    fontSize: 40, 
+    fontWeight: "400", 
     color: '#FFFFFF',
   },
 
   box1: {
     backgroundColor: 'white', 
-    height: '44%',
-    width: '88%',
+    height: '45%',
+    width: '95%',
     justifyContent: 'space-around', 
     alignItems: 'center',
 
@@ -130,7 +125,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 1,
     borderColor: 'grey',
-    width: '88%',
+    width: '90%',
     height: 60,
     paddingLeft: 20,
     flexDirection: 'row',
@@ -138,36 +133,35 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 20,
-    height: 20,
-    marginRight: 10
+    width: 25,
+    height: 25,
+    marginRight: 20
   },
 
   input: {
     fontSize: 16, 
-    fontWeight: "300", 
+    fontWeight: "400", 
     color: '#757083', 
-    opacity: 0.5,
+    opacity: 50
   },
 
   colorBox: {
-    marginRight: 'auto',
-    paddingLeft: 15,
-    width: '88%'
+    alignItems: 'center',
+    paddingTop: '9%'
   },
 
   chooseColor: {
-    fontSize: 16, 
-    fontWeight: "300", 
-    color: '#757083', 
-    opacity: 1,
+    fontSize: 14, 
+    fontWeight: "500", 
+    color: '#757083'
   },
 
   colorArray: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '88%',
-    paddingRight: 60
+    width: '90%',
+    paddingRight: 5,
+    alignItems: 'center'
   },
 
   color1: {
@@ -203,12 +197,16 @@ const styles = StyleSheet.create({
     height: 70,
     backgroundColor: '#757083',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: 310,
+    height: 60,
+    borderRadius: 30
+
   },
 
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: "600"
+    fontSize: 18,
+    fontWeight: "400"
   }
 });
