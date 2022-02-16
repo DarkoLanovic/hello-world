@@ -32,13 +32,17 @@ export default class Start extends React.Component {
         <ImageBackground source={BackgroundImage} resizeMode='cover' style={styles.backgroundImage}>
 
           <View style={styles.titleBox}> 
-            <Text style={styles.title}>ChatApp</Text> 
+            <Text style={styles.title}>ChatMe</Text> 
           </View>
 
           <View style={styles.box1}>
             <View style={styles.inputBox}>
               <Image source={icon} style={styles.image} />
               <TextInput
+              accessible={true}
+              accessibilityLabel="Type your name here"
+              accessibilityHint="Lets you enter your name"
+              accessibilityRole="search"
                 style={styles.input}
                 onChangeText={(text) => this.setState({ name: text})}
                 value={this.state.name}
@@ -90,6 +94,8 @@ export default class Start extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
+    flexDirection: 'column',
+    alignItems: 'center'
   },
 
   backgroundImage: {
@@ -140,7 +146,8 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    fontSize: 16, 
+    flex: 1,
+    fontSize: 18, 
     fontWeight: "400", 
     color: '#757083', 
     opacity: 50

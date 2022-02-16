@@ -1,7 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
 
 export default class Chat extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      message: [],
+    }
+  }
   render() {
     // Entered name state from Start screen gets displayed in status bar at the top of the Chat screen
     let name = this.props.route.params.name; // OR ...  let { nmae } = this.props.routw.params; 
