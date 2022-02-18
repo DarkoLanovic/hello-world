@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Pressable, ImageBackground, Image, TouchableOpacity, Platform, KeyboardAvoidingView } from 'react-native';
 import BackgroundImage from '../assets/background-image.png';
 import icon from '../assets/user-icon.png';
+
 
 export default class Start extends React.Component {
   constructor(props) {
@@ -94,8 +95,6 @@ export default class Start extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    flexDirection: 'column',
-    alignItems: 'center'
   },
 
   backgroundImage: {
