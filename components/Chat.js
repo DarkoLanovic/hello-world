@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Platform, Button, KeyboardAvoidingView } from 'react-native';
+import { View, Platform, KeyboardAvoidingView } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 
 
@@ -12,6 +12,8 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
+    let name = this.props.route.params.name;
+    
     this.setState({
       messages: [
         {
@@ -26,7 +28,7 @@ export default class Chat extends React.Component {
         },
         {
           _id: 2,
-          text: 'Welcome to the chat room!',
+          text: `${name} started chat`,
           createdAt: new Date(),
           system: true,
          },
@@ -64,20 +66,18 @@ export default class Chat extends React.Component {
   render() {
 
     // Entered name state from Start screen gets displayed in status bar at the top of the Chat screen
-    let name = this.props.route.params.name; // OR ...  let { nmae } = this.props.route.params; 
+    let name = this.props.route.params.name; // OR ...  let { name } = this.props.route.params; 
     this.props.navigation.setOptions({ title: name});
 
-    const { bgColor } = this.props.route.params;
+    const bgColor = this.props.route.params.bgColor;
 
     return (
-      <View style={{ flex: 1}}>
+      <View style={{ flex: 1, backgroundColor: bgColor }}>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
           onSend={(messages) => this.onSend(messages)}
-          user={{
-          _id: 1,
-        }}
+          user={{_id: 1,}}
         /> 
         { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
       
