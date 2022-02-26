@@ -5,8 +5,6 @@ import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import firebase from 'firebase';
 import 'firebase/firestore';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 // Firebase configuration
 const firebaseConfig ={
