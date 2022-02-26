@@ -5,6 +5,10 @@ import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import firebase from 'firebase';
 import 'firebase/firestore';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+// Firebase configuration
 const firebaseConfig ={
   apiKey: "AIzaSyDRVGE6qFTu5afoyXfhGgZmNSDO-vQGP2M",
   authDomain: "chatapp-da543.firebaseapp.com",
@@ -17,7 +21,7 @@ const firebaseConfig ={
 
 export default class Chat extends React.Component {
 
-  constructor(props){
+  constructor(){
     super();
     this.state ={
       messages: [],
@@ -27,14 +31,13 @@ export default class Chat extends React.Component {
         name: "",
         avatar: "",
       },
-
     };
 
-    //initializing firebase
+    // Initializing firebase
     if (!firebase.apps.length){
       firebase.initializeApp(firebaseConfig);
     }
-    // reference to the Firestore message collection
+    // Reference to the Firestore message collection
     this.referenceChatMessages = firebase.firestore().collection("messages");
     this.refMsgsUser = null;
 
@@ -43,22 +46,22 @@ export default class Chat extends React.Component {
 
   componentDidMount() {
     // Set the page title once Chat is loaded
-    let { name } = this.props.route.params
+    let name = this.props.route.params.name;
     // Adds the name to top of screen
     this.props.navigation.setOptions({ title: name })
 
-    // listens for updates in the collection
+    // Listens for updates in the collection
     this.unsubscribe = this.referenceChatMessages
       .orderBy("createdAt", "desc")
       .onSnapshot(this.onCollectionUpdate)
 
-    // user authentication performed first
+    // User authentication performed first (listen for authentication events)
     this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         return await firebase.auth().signInAnonymously();
       }
 
-      //update user state with currently active user data
+      // Update user state with currently active user data
       this.setState({
         uid: user.uid,
         messages: [],
@@ -69,24 +72,71 @@ export default class Chat extends React.Component {
         },
       });
 
-      //referencing messages of current user
+      // Referencing messages of current user
       this.refMsgsUser = firebase
         .firestore()
         .collection("messages")
         .where("uid", "==", this.state.uid);
     });
 
-     
+    // Save messages locally to AsyncStorage
+    this.saveMessage();
+  }
+
+
+  componentWillUnmount() {
+    // Unsubscribe from collection updates (stop listening to authentication)
+    this.authUnsubscribe();
+    // Stop listening for changes
+    this.unsubscribe();
 
   }
 
 
-  // when updated set the messages state with the current data 
+  // Get messages from AsyncStorage
+	getMessages = async () => {
+		let messages = '';
+		try {
+			messages = (await AsyncStorage.getItem('messages')) || [];
+			this.setState({
+				messages: JSON.parse(messages),
+			});
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
+
+	// Save messages on the asyncStorage
+	saveMessage = async () => {
+		try {
+			await AsyncStorage.setItem(
+				'messages',
+				JSON.stringify(this.state.messages)
+			);
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
+
+	// Delete message from asyncStorage
+	deleteMessages = async () => {
+		try {
+			await AsyncStorage.removeItem('messages');
+			this.setState({
+				messages: [],
+			});
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
+
+
+  // When updated set the messages state with the current data 
   onCollectionUpdate = (querySnapshot) => { 
     const messages = [];
-    // go through each document
+    // Go through each document
     querySnapshot.forEach((doc) => {
-      // get the QueryDocumentSnapshot's data
+      // Get the QueryDocumentSnapshot's data
       let data = doc.data();
       messages.push({
         _id: data._id,
@@ -104,17 +154,12 @@ export default class Chat extends React.Component {
     });
   };
 
-  componentWillUnmount() {
-    //unsubscribe from collection updates
-    this.authUnsubscribe();
-    this.unsubscribe();
-
-  }
+  
 
   // Add messages to database
-  addMessages() { 
+  addMessage() { 
     const message = this.state.messages[0];
-    // add a new messages to the collection
+    // Add a new messages to the collection
     this.referenceChatMessages.add({
       _id: message._id,
       text: message.text || "",
@@ -125,28 +170,34 @@ export default class Chat extends React.Component {
   }
 
 
-  // calback function for when user sends a message
-    /*  the function setState() is called with the parameter previousState, 
+  // Calback function for when user sends a message
+  /* The function setState() is called with the parameter previousState, 
   which is a reference to the component’s state at the time the change is applied. 
   Then comes the append() function provided by GiftedChat, 
   which appends the new message to the messages object. In other words, 
   the message a user has just sent gets appended to the state messages so 
   that it can be displayed in the chat. */
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
-  }
+		this.setState(
+			previousState => ({
+				messages: GiftedChat.append(previousState.messages, messages),
+			}),
+			() => {
+				this.saveMessage();
+				this.addMessage();
+			}
+		);
+	}
 
   // Customize the chat bubble background color
   renderBubble(props) { 
     return (
       <Bubble {...props} 
-      wrapperStyle={{ 
-        right: {backgroundColor: 'purple'},
+        wrapperStyle={{ 
+          right: {backgroundColor: 'purple'},
        }}
       />
-    )
+    );
   }
 
   
@@ -160,23 +211,24 @@ export default class Chat extends React.Component {
         flex: 1,
         alignItems:'center', 
         justifyContent:'center', 
-        backgroundColor: bgColor}}>
+        backgroundColor: bgColor}}
+      >
         
         <View style={styles.giftedChat}>
            <GiftedChat
               renderBubble={this.renderBubble.bind(this)}
               messages={this.state.messages}
-              user={this.state.user}
+              //user={this.state.user}
               onSend={messages => this.onSend(messages)}
               user={{
                 _id: this.state.user._id,
                 name: this.state.name,
                 avatar: this.state.user.avatar
               }}
-            />
+           />
             { Platform.OS === 'android' ? (
               <KeyboardAvoidingView behavior="height" />
-              ) : null}
+            ) : null}
         </View>
       </View>
     );
@@ -189,7 +241,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems:'center', 
-    justifyContent:'center'
+    justifyContent:'center',
+    flexDirection: 'column'
   },
   giftedChat: {
     flex: 1,
