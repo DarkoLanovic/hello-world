@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import ImagePicker from 'expo-image-picker';
-import Location from 'expo-location';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import firebase from "firebase";
 import "firebase/firestore";
 
@@ -32,8 +32,8 @@ export default class CustomActions extends React.Component {
     };
   /**
    * Let the user take a photo with device's camera
-   * function takePhoto
-   * async
+   * //function takePhoto
+   * // async
    */
    //allow user take a photo from camera
    takePhoto = async () => {
@@ -58,8 +58,8 @@ export default class CustomActions extends React.Component {
  
 /**
    * get the location of the user by using GPS
-   * function getLocation
-   * async
+   * //function getLocation
+   * //async
    */
    //allow users to get their location by using GPS
    getLocation = async () => {
