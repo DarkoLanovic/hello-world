@@ -6,7 +6,7 @@ import NetInfo from "@react-native-community/netinfo";
 import MapView from 'react-native-maps';
 import CustomActions from './CustomActions';
 
-import firebase from 'firebase';
+import firebase from "firebase";
 import 'firebase/firestore';
 
 
@@ -230,9 +230,9 @@ export default class Chat extends React.Component {
   }
 
   // action button to access custom features
-//  renderCustomActions(props) {
-//   return <CustomActions {...props} />;
-// }
+ renderCustomActions(props) {
+  return <CustomActions {...props} />;
+}
 
 
   
