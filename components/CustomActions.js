@@ -32,8 +32,8 @@ export default class CustomActions extends React.Component {
     };
   /**
    * Let the user take a photo with device's camera
-   * //function takePhoto
-   * // async
+   * function takePhoto
+   * async
    */
    //allow user take a photo from camera
    takePhoto = async () => {

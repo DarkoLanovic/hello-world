@@ -34,6 +34,7 @@ export default class Chat extends React.Component {
         avatar: "",
       },
       isConnected: false,
+      image: null,location: null
     };
 
     // Initializing firebase
@@ -43,7 +44,6 @@ export default class Chat extends React.Component {
 
     // Reference to the Firestore message collection
     this.referenceChatMessages = firebase.firestore().collection("messages");
-    //this.refMsgsUser = null;
 
   }
   
@@ -56,10 +56,10 @@ export default class Chat extends React.Component {
     this.props.navigation.setOptions({ title: name })
 
      // check if user is online
-		NetInfo.fetch().then(connection => {
+		NetInfo.fetch().then((connection) => {
 			if (connection.isConnected) {
-				this.setState({ isConnected: true });
-				console.log('online');
+				// this.setState({ isConnected: true });
+				// console.log('online');
 
         // Listens for updates in the collection
         this.unsubscribe = this.referenceChatMessages
@@ -81,6 +81,7 @@ export default class Chat extends React.Component {
               name: name,
               avatar: "https://placeimg.com/140/140/any",
             },
+            isConnected: true,
           });
 
           // Referencing messages of current user
@@ -118,9 +119,9 @@ export default class Chat extends React.Component {
   // Get messages from AsyncStorage
 	getMessages = async () => {
     // Load messages from local AsyncStorage
-		let messages = '';
+		let messages = "";
 		try {
-			messages = await AsyncStorage.getItem('messages') || [];
+			messages = await AsyncStorage.getItem("messages") || [];
 			this.setState({
 				messages: JSON.parse(messages),
 			});
@@ -134,7 +135,7 @@ export default class Chat extends React.Component {
     // Save messages from database into local AsyncStorage
 		try {
 			await AsyncStorage.setItem(
-				'messages',
+				"messages",
 				JSON.stringify(this.state.messages)
 			);
 		} catch (error) {
@@ -158,11 +159,14 @@ export default class Chat extends React.Component {
           name: data.user.name,
           avatar: data.user.avatar
         },
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
       messages: messages,
     });
+    this.saveMessage();
   };
 
   
@@ -173,10 +177,11 @@ export default class Chat extends React.Component {
     // Add a new messages to the collection
     this.referenceChatMessages.add({
       _id: message._id,
-      text: message.text || '',
+      text: message.text || "",
       createdAt: message.createdAt,
       user: this.state.user,
-      
+      image: message.image || "",
+      location: message.location || null,  
     });
   }
 
@@ -254,8 +259,8 @@ export default class Chat extends React.Component {
               renderBubble={this.renderBubble.bind(this)}
               renderSystemMessage={this.renderSystemMessage.bind(this)}
               renderInputToolbar={this.renderInputToolbar.bind(this)}
-              renderInputToolbar={this.renderInputToolbar.bind(this)}
               renderActions={this.renderCustomActions}
+              renderCustomView={this.renderCustomView}
               messages={this.state.messages}
               //user={this.state.user}
               onSend={messages => this.onSend(messages)}
@@ -273,7 +278,6 @@ export default class Chat extends React.Component {
     );
   }
 }
-
 
 
 const styles = StyleSheet.create({
