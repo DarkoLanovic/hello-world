@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
+import ImagePicker from 'expo-image-picker';
+import Location from 'expo-location';
 import firebase from "firebase";
 import "firebase/firestore";
 
@@ -58,8 +58,8 @@ export default class CustomActions extends React.Component {
  
 /**
    * get the location of the user by using GPS
-   * //function getLocation
-   * //async
+   * unction getLocation
+   * async
    */
    //allow users to get their location by using GPS
    getLocation = async () => {
